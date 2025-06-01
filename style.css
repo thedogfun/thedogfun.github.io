@@ -420,7 +420,7 @@ canvas {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid white;
+  border: none;
   margin-bottom: 6px;
   object-fit: cover;
 }
@@ -499,13 +499,11 @@ canvas {
   color: #10b981;
 }
 
-nav {
+.fixed-nav {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 100%;
-  max-width: 400px;
   background: rgba(14, 17, 31, 0.95);
   backdrop-filter: blur(10px);
   display: flex;
@@ -533,7 +531,7 @@ nav {
   width: 24px;
   height: 24px;
   margin-bottom: 4px;
-  filter: brightness(0.8);
+  filter: brightness(1) hue-rotate(180deg);
 }
 
 .nav-item.active {

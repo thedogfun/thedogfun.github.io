@@ -101,7 +101,7 @@ let lastClaimTime = localStorage.getItem('lastClaimTime') ? new Date(localStorag
 
 document.getElementById('connectBtn').addEventListener('click', () => {
   const mockCreatedAt = new Date('2023-10-01');
-  const today = new Date('2025-06-01T16:18:00+06:00');
+  const today = new Date('2025-06-01T17:57:00+06:00');
   const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const availableTokens = hoursSinceLastClaim;
@@ -126,7 +126,7 @@ function closePopup() {
 }
 
 document.getElementById('claimBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T16:18:00+06:00');
+  const today = new Date('2025-06-01T17:57:00+06:00');
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const tokensToClaim = hoursSinceLastClaim;
 
@@ -197,7 +197,7 @@ function updateLeaderboard() {
       const user = users[index];
       card.querySelector('.leaderboard-info p:nth-child(1)').textContent = `#${index + 1} ${user.id}`;
       card.querySelector('.leaderboard-info p.earned').textContent = `${user.tokens} CAST`;
-      card.querySelector('img').src = `https://iili.io/3mONB4f.png`;
+      card.querySelector('img').src = `https://iili.io/FHHL8BV.png`;
     }
   });
 
@@ -205,7 +205,7 @@ function updateLeaderboard() {
   topRank.forEach((user, index) => {
     if (index < 3 && users[index]) {
       user.querySelector('.info').innerHTML = `🥇 ${users[index].id}<br><span>${users[index].tokens} CAST</span>`;
-      user.querySelector('.avatar').src = `https://iili.io/3mONB4f.png`;
+      user.querySelector('.avatar').src = `https://iili.io/FHHL8BV.png`;
     }
   });
 
