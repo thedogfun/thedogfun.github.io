@@ -50,15 +50,15 @@ function logout() {
   localStorage.removeItem('userLoggedIn');
   localStorage.removeItem('lastClaimTime');
   localStorage.removeItem('totalTokens');
-  document.getElementById('connectBtn').style.display = 'block';
-  document.getElementById('claimBtn').style.display = 'none';
+  localStorage.removeItem('userId');
+  localStorage.removeItem('accountCreatedAt');
   document.getElementById('castBalance').textContent = '0';
-  document.getElementById('castBalanceFriends').textContent = '0';
   document.getElementById('totalEarned').textContent = '0';
-  document.getElementById('farcasterUsernameHome').textContent = 'User';
-  document.getElementById('farcasterUsernameFriends').textContent = 'User';
-  document.getElementById('farcasterUsernameLeaderboard').textContent = 'User';
   document.getElementById('userLogo').src = 'https://iili.io/FHHL8BV.png';
+  document.getElementById('registrationPopup').style.display = 'block';
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('friendsPage').style.display = 'none';
+  document.getElementById('leaderboardPage').style.display = 'none';
   alert('Logged out successfully!');
   document.getElementById('userDropdown').style.display = 'none';
 }
@@ -76,12 +76,14 @@ function showPage(pageId) {
 }
 
 // Invite functions
-const inviteLink = 'https://castapp.xyz/invite?ref=' + (localStorage.getItem('userId') || 'user');
+const inviteLinkBase = 'https://castapp.xyz/invite?ref=';
 function shareInvite() {
+  const userId = localStorage.getItem('userId') || 'user';
+  const inviteLink = `${inviteLinkBase}${userId}`;
   if (navigator.share) {
     navigator.share({
       title: 'Join CAST',
-      text: 'Join me on CAST and earn rewards! Referral by ' + (localStorage.getItem('userId') || 'user'),
+      text: 'Join me on CAST and earn rewards! Referral by ' + userId,
       url: inviteLink
     }).catch(err => {
       console.error('Error sharing:', err);
@@ -93,6 +95,8 @@ function shareInvite() {
 }
 
 function copyInvite() {
+  const userId = localStorage.getItem('userId') || 'user';
+  const inviteLink = `${inviteLinkBase}${userId}`;
   navigator.clipboard.writeText(inviteLink).then(() => {
     alert('Invite link copied to clipboard!');
   });
@@ -111,7 +115,7 @@ async function fetchUserData(userId) {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('username, avatar')
+      .select('username, avatar, created_at')
       .eq('id', userId)
       .single();
 
@@ -123,59 +127,94 @@ async function fetchUserData(userId) {
     if (data) {
       farcasterUsername = data.username || 'User';
       farcasterAvatar = data.avatar || 'https://iili.io/FHHL8BV.png';
+      const accountCreatedAt = new Date(data.created_at);
+      localStorage.setItem('accountCreatedAt', accountCreatedAt.toISOString());
 
       // Update UI with user data
-      document.getElementById('farcasterUsernameHome').textContent = farcasterUsername;
-      document.getElementById('farcasterUsernameFriends').textContent = farcasterUsername;
-      document.getElementById('farcasterUsernameLeaderboard').textContent = farcasterUsername;
       document.getElementById('userLogo').src = farcasterAvatar;
+
+      // Update leaderboard user data
+      updateLeaderboard();
     }
   } catch (err) {
     console.error('Unexpected error:', err);
   }
 }
 
-// Farcaster connection logic
+// Registration and Claim Logic
 let initialBalance = parseInt(localStorage.getItem('totalTokens') || 0);
 let taskRewards = 0;
 let completedTasksCount = 0;
 let userId = localStorage.getItem('userId') || 'user' + Math.floor(Math.random() * 1000);
+let accountCreatedAt = localStorage.getItem('accountCreatedAt') ? new Date(localStorage.getItem('accountCreatedAt')) : new Date('2023-10-01');
 let lastClaimTime = localStorage.getItem('lastClaimTime') ? new Date(localStorage.getItem('lastClaimTime')) : new Date('2023-10-01');
 
-document.getElementById('connectBtn').addEventListener('click', async () => {
-  const mockCreatedAt = new Date('2023-10-01');
-  const today = new Date('2025-06-01T22:11:00+06:00');
-  const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
-  const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
-  const availableTokens = hoursSinceLastClaim;
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('userLoggedIn')) {
+    document.getElementById('registrationPopup').style.display = 'block';
+    document.getElementById('homePage').style.display = 'none';
+    document.getElementById('friendsPage').style.display = 'none';
+    document.getElementById('leaderboardPage').style.display = 'none';
+  } else {
+    document.getElementById('registrationPopup').style.display = 'none';
+    fetchUserData(userId).then(() => {
+      showPage('homePage');
+      document.getElementById('claimBtn').style.display = 'block';
+      document.getElementById('castBalance').textContent = initialBalance;
+      document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
+      updateLeaderboard();
+    });
+  }
+});
 
-  // Fetch user data from Supabase
+document.getElementById('registerBtn').addEventListener('click', async () => {
+  // Simulate Farcaster registration (replace with actual Farcaster SDK integration)
+  userId = 'user' + Math.floor(Math.random() * 1000); // Mock user ID
   await fetchUserData(userId);
 
   localStorage.setItem('userLoggedIn', 'true');
   localStorage.setItem('userId', userId);
-  localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
-  localStorage.setItem('totalTokens', initialBalance);
+  localStorage.setItem('accountCreatedAt', accountCreatedAt.toISOString());
 
-  document.getElementById('userId').textContent = userId;
+  const today = new Date('2025-06-01T22:26:00+06:00');
+  const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
+  const availableTokens = diffDays * 25;
+
   document.getElementById('accountAge').textContent = diffDays;
   document.getElementById('availableTokens').textContent = availableTokens;
-  document.getElementById('popup').style.display = 'block';
-  document.getElementById('connectBtn').style.display = 'none';
-  document.getElementById('claimBtn').style.display = 'block';
-  document.getElementById('castBalance').textContent = initialBalance;
-  document.getElementById('castBalanceFriends').textContent = initialBalance;
-  document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
+  document.getElementById('accountAgeInfo').style.display = 'block';
+  document.getElementById('registerBtn').style.display = 'none';
+  document.getElementById('claimPopupBtn').style.display = 'block';
 });
 
-function closePopup() {
-  document.getElementById('popup').style.display = 'none';
-}
+document.getElementById('claimPopupBtn').addEventListener('click', () => {
+  const today = new Date('2025-06-01T22:26:00+06:00');
+  const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
+  const tokensToClaim = diffDays * 25;
+
+  if (tokensToClaim > 0) {
+    initialBalance += tokensToClaim;
+    lastClaimTime = today;
+    localStorage.setItem('totalTokens', initialBalance);
+    localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
+
+    document.getElementById('castBalance').textContent = initialBalance;
+    document.getElementById('totalEarned').textContent = initialBalance;
+    document.getElementById('registrationPopup').style.display = 'none';
+    document.getElementById('homePage').style.display = 'block';
+    document.getElementById('claimBtn').style.display = 'block';
+    document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
+    updateLeaderboard();
+    alert(`Claimed ${tokensToClaim} tokens!`);
+  }
+});
 
 document.getElementById('claimBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T22:11:00+06:00');
+  const today = new Date('2025-06-01T22:26:00+06:00');
+  const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
-  const tokensToClaim = hoursSinceLastClaim;
+  const daysSinceLastClaim = Math.floor(hoursSinceLastClaim / 24);
+  const tokensToClaim = daysSinceLastClaim * 25;
 
   if (tokensToClaim > 0) {
     initialBalance += tokensToClaim;
@@ -183,7 +222,6 @@ document.getElementById('claimBtn').addEventListener('click', () => {
     localStorage.setItem('totalTokens', initialBalance);
     localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
     document.getElementById('castBalance').textContent = initialBalance;
-    document.getElementById('castBalanceFriends').textContent = initialBalance;
     document.getElementById('totalEarned').textContent = initialBalance;
     updateLeaderboard();
     alert(`Claimed ${tokensToClaim} tokens!`);
@@ -211,10 +249,9 @@ function completeTask(taskId) {
     completedTasksCount += 1;
     const totalBalance = initialBalance + taskRewards;
     document.getElementById('castBalance').textContent = totalBalance;
-    document.getElementById('castBalanceFriends').textContent = totalBalance;
+    document.getElementById('totalEarned').textContent = totalBalance;
     document.getElementById('completedTasks').textContent = completedTasksCount;
     document.getElementById('totalRewards').textContent = taskRewards;
-    document.getElementById('totalEarned').textContent = totalBalance;
     updateLeaderboard();
     alert(`Task completed! +${task.reward} CAST added to your balance.`);
     const button = document.querySelector(`.check-btn[data-id="${taskId}"]`);
@@ -227,51 +264,37 @@ function completeTask(taskId) {
 function updateLeaderboard() {
   const leaderboardCards = document.querySelectorAll('.leaderboard-card');
   let users = [
-    { id: 'user123', tokens: 3015421 },
-    { id: 'user456', tokens: 983167 },
-    { id: 'user789', tokens: 546264 },
-    { id: 'user101', tokens: 479308 },
-    { id: 'user202', tokens: 436877 },
-    { id: 'user303', tokens: 412749 },
-    { id: 'user404', tokens: 358743 },
-    { id: 'user505', tokens: 315007 },
-    { id: 'user606', tokens: 286374 },
-    { id: 'user707', tokens: 270123 }
+    { id: 'user123', username: 'user123', avatar: 'https://iili.io/FHHL8BV.png', tokens: 3015421 },
+    { id: 'user456', username: 'user456', avatar: 'https://iili.io/FHHL8BV.png', tokens: 983167 },
+    { id: 'user789', username: 'user789', avatar: 'https://iili.io/FHHL8BV.png', tokens: 546264 },
+    { id: 'user101', username: 'user101', avatar: 'https://iili.io/FHHL8BV.png', tokens: 479308 },
+    { id: 'user202', username: 'user202', avatar: 'https://iili.io/FHHL8BV.png', tokens: 436877 },
+    { id: 'user303', username: 'user303', avatar: 'https://iili.io/FHHL8BV.png', tokens: 412749 },
+    { id: 'user404', username: 'user404', avatar: 'https://iili.io/FHHL8BV.png', tokens: 358743 },
+    { id: 'user505', username: 'user505', avatar: 'https://iili.io/FHHL8BV.png', tokens: 315007 },
+    { id: 'user606', username: 'user606', avatar: 'https://iili.io/FHHL8BV.png', tokens: 286374 },
+    { id: 'user707', username: 'user707', avatar: 'https://iili.io/FHHL8BV.png', tokens: 270123 }
   ];
-  users.push({ id: userId, tokens: initialBalance + taskRewards });
+  users.push({ id: userId, username: farcasterUsername, avatar: farcasterAvatar, tokens: initialBalance + taskRewards });
   users.sort((a, b) => b.tokens - a.tokens);
 
   leaderboardCards.forEach((card, index) => {
     if (index < users.length) {
       const user = users[index];
-      card.querySelector('.leaderboard-info p:nth-child(1)').textContent = `#${index + 1} ${user.id}`;
+      card.querySelector('.leaderboard-info p:nth-child(1)').textContent = `#${index + 1} ${user.username}`;
       card.querySelector('.leaderboard-info p.earned').textContent = `${user.tokens} CAST`;
-      card.querySelector('img').src = `https://iili.io/FHHL8BV.png`;
+      card.querySelector('img').src = user.avatar;
     }
   });
 
   const topRank = document.querySelectorAll('.top-rank .user');
   topRank.forEach((user, index) => {
     if (index < 3 && users[index]) {
-      user.querySelector('.info').innerHTML = `🥇 ${users[index].id}<br><span>${users[index].tokens} CAST</span>`;
-      user.querySelector('.avatar').src = `https://iili.io/FHHL8BV.png`;
+      user.querySelector('.info').innerHTML = `🥇 ${users[index].username}<br><span>${users[index].tokens} CAST</span>`;
+      user.querySelector('.avatar').src = users[index].avatar;
     }
   });
 
   const userRank = users.findIndex(u => u.id === userId) + 1;
   document.getElementById('userRank').textContent = userRank;
-}
-
-// Initial page load
-if (localStorage.getItem('userLoggedIn')) {
-  document.getElementById('connectBtn').style.display = 'none';
-  document.getElementById('claimBtn').style.display = 'block';
-  document.getElementById('castBalance').textContent = initialBalance;
-  document.getElementById('castBalanceFriends').textContent = initialBalance;
-  document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
-  fetchUserData(userId).then(() => {
-    updateLeaderboard();
-  });
-} else {
-  showPage('homePage');
 }
