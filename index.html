@@ -71,10 +71,9 @@
       </div>
 
       <div class="balance">
-        <span id="farcasterUsernameHome">User</span>: <span id="castBalance">0</span> CAST
+        <span id="castBalance">0</span> CAST
       </div>
 
-      <button id="connectBtn">Connect Farcaster</button>
       <button id="claimBtn" style="display:none;">Claim Tokens</button>
 
       <div class="community-section">
@@ -165,9 +164,6 @@
 
     <!-- Friends Page -->
     <div id="friendsPage" class="friends-page">
-      <div class="balance">
-        <span id="farcasterUsernameFriends">User</span>: <span id="castBalanceFriends">0</span> CAST
-      </div>
       <div class="invite-buttons">
         <p>Invite Your Friends</p>
         <p style="font-size: 0.9rem;">Share your invitation link and get 10% of friends' points</p>
@@ -262,7 +258,7 @@
       </div>
 
       <div class="rank-summary">
-        <p><span id="farcasterUsernameLeaderboard">User</span> ranked #<span id="userRank">588</span></p>
+        <p>You're ranked #<span id="userRank">588</span></p>
         <p class="earned">Earned <span id="totalEarned">0</span> CAST</p>
       </div>
 
@@ -349,14 +345,14 @@
       </div>
     </nav>
 
-    <!-- Popup -->
-    <div id="popup" style="display:none;">
+    <!-- Registration Popup -->
+    <div id="registrationPopup" class="popup">
       <div class="popup-content">
-        <h2>Connection Successful!</h2>
-        <p>Your Farcaster ID: <span id="userId"></span></p>
-        <p>Account Age: <span id="accountAge"></span> days</p>
-        <p>Available Tokens: <span id="availableTokens"></span></p>
-        <button onclick="closePopup()">Close</button>
+        <h2>Register with Farcaster</h2>
+        <p>Please connect your Farcaster account to start.</p>
+        <button id="registerBtn">Register</button>
+        <p id="accountAgeInfo" style="display:none;">Your account is <span id="accountAge">0</span> days old. Available Tokens: <span id="availableTokens">0</span></p>
+        <button id="claimPopupBtn" style="display:none;">Claim Tokens</button>
       </div>
     </div>
   </div>
