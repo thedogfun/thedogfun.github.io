@@ -44,6 +44,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CAST - Farcaster Mini App</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Add Supabase JavaScript client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -54,7 +56,7 @@
         <h1>CAST</h1>
       </div>
       <div class="header-right">
-        <img src="https://iili.io/FHHL8BV.png" alt="Farcaster User" onclick="toggleDropdown()" id="userLogo" />
+        <img src="https://iili.io/FHHL8BV.png" alt="Farcaster User" id="userLogo" onclick="toggleDropdown()" />
         <div class="dropdown" id="userDropdown">
           <button onclick="logout()">Logout</button>
         </div>
@@ -69,7 +71,7 @@
       </div>
 
       <div class="balance">
-        <span id="castBalance">0</span> CAST
+        <span id="farcasterUsernameHome">User</span>: <span id="castBalance">0</span> CAST
       </div>
 
       <button id="connectBtn">Connect Farcaster</button>
@@ -163,6 +165,9 @@
 
     <!-- Friends Page -->
     <div id="friendsPage" class="friends-page">
+      <div class="balance">
+        <span id="farcasterUsernameFriends">User</span>: <span id="castBalanceFriends">0</span> CAST
+      </div>
       <div class="invite-buttons">
         <p>Invite Your Friends</p>
         <p style="font-size: 0.9rem;">Share your invitation link and get 10% of friends' points</p>
@@ -257,7 +262,7 @@
       </div>
 
       <div class="rank-summary">
-        <p>You're ranked #588</p>
+        <p><span id="farcasterUsernameLeaderboard">User</span> ranked #<span id="userRank">588</span></p>
         <p class="earned">Earned <span id="totalEarned">0</span> CAST</p>
       </div>
 

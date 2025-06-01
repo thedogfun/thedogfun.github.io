@@ -1,3 +1,8 @@
+// Initialize Supabase client
+const SUPABASE_URL = "https://pnsfnfmrkgalqsvyfuqw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBuc2ZuZm1ya2dhbHFzdnlmdXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg3ODA3NzAsImV4cCI6MjA2NDM1Njc3MH0.Ol0QHY--z9EGrQshqSxTUg-I-PwaUZgNJeSFj3oLMAI";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // Particle animation
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
@@ -48,6 +53,12 @@ function logout() {
   document.getElementById('connectBtn').style.display = 'block';
   document.getElementById('claimBtn').style.display = 'none';
   document.getElementById('castBalance').textContent = '0';
+  document.getElementById('castBalanceFriends').textContent = '0';
+  document.getElementById('totalEarned').textContent = '0';
+  document.getElementById('farcasterUsernameHome').textContent = 'User';
+  document.getElementById('farcasterUsernameFriends').textContent = 'User';
+  document.getElementById('farcasterUsernameLeaderboard').textContent = 'User';
+  document.getElementById('userLogo').src = 'https://iili.io/FHHL8BV.png';
   alert('Logged out successfully!');
   document.getElementById('userDropdown').style.display = 'none';
 }
@@ -92,6 +103,38 @@ function shareReferLink() {
   completeTask(7);
 }
 
+// Fetch user data from Supabase
+let farcasterUsername = 'User';
+let farcasterAvatar = 'https://iili.io/FHHL8BV.png';
+
+async function fetchUserData(userId) {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('username, avatar')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user data:', error);
+      return;
+    }
+
+    if (data) {
+      farcasterUsername = data.username || 'User';
+      farcasterAvatar = data.avatar || 'https://iili.io/FHHL8BV.png';
+
+      // Update UI with user data
+      document.getElementById('farcasterUsernameHome').textContent = farcasterUsername;
+      document.getElementById('farcasterUsernameFriends').textContent = farcasterUsername;
+      document.getElementById('farcasterUsernameLeaderboard').textContent = farcasterUsername;
+      document.getElementById('userLogo').src = farcasterAvatar;
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+  }
+}
+
 // Farcaster connection logic
 let initialBalance = parseInt(localStorage.getItem('totalTokens') || 0);
 let taskRewards = 0;
@@ -99,16 +142,19 @@ let completedTasksCount = 0;
 let userId = localStorage.getItem('userId') || 'user' + Math.floor(Math.random() * 1000);
 let lastClaimTime = localStorage.getItem('lastClaimTime') ? new Date(localStorage.getItem('lastClaimTime')) : new Date('2023-10-01');
 
-document.getElementById('connectBtn').addEventListener('click', () => {
+document.getElementById('connectBtn').addEventListener('click', async () => {
   const mockCreatedAt = new Date('2023-10-01');
-  const today = new Date('2025-06-01T18:08:00+06:00');
+  const today = new Date('2025-06-01T22:11:00+06:00');
   const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const availableTokens = hoursSinceLastClaim;
 
+  // Fetch user data from Supabase
+  await fetchUserData(userId);
+
   localStorage.setItem('userLoggedIn', 'true');
   localStorage.setItem('userId', userId);
-  localStorage.setItem('lastClaimTime', lastClaimTime);
+  localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
   localStorage.setItem('totalTokens', initialBalance);
 
   document.getElementById('userId').textContent = userId;
@@ -118,6 +164,7 @@ document.getElementById('connectBtn').addEventListener('click', () => {
   document.getElementById('connectBtn').style.display = 'none';
   document.getElementById('claimBtn').style.display = 'block';
   document.getElementById('castBalance').textContent = initialBalance;
+  document.getElementById('castBalanceFriends').textContent = initialBalance;
   document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
 });
 
@@ -126,7 +173,7 @@ function closePopup() {
 }
 
 document.getElementById('claimBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T18:08:00+06:00');
+  const today = new Date('2025-06-01T22:11:00+06:00');
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const tokensToClaim = hoursSinceLastClaim;
 
@@ -134,8 +181,9 @@ document.getElementById('claimBtn').addEventListener('click', () => {
     initialBalance += tokensToClaim;
     lastClaimTime = today;
     localStorage.setItem('totalTokens', initialBalance);
-    localStorage.setItem('lastClaimTime', lastClaimTime);
+    localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
     document.getElementById('castBalance').textContent = initialBalance;
+    document.getElementById('castBalanceFriends').textContent = initialBalance;
     document.getElementById('totalEarned').textContent = initialBalance;
     updateLeaderboard();
     alert(`Claimed ${tokensToClaim} tokens!`);
@@ -163,6 +211,7 @@ function completeTask(taskId) {
     completedTasksCount += 1;
     const totalBalance = initialBalance + taskRewards;
     document.getElementById('castBalance').textContent = totalBalance;
+    document.getElementById('castBalanceFriends').textContent = totalBalance;
     document.getElementById('completedTasks').textContent = completedTasksCount;
     document.getElementById('totalRewards').textContent = taskRewards;
     document.getElementById('totalEarned').textContent = totalBalance;
@@ -209,18 +258,20 @@ function updateLeaderboard() {
     }
   });
 
-  const rankSummary = document.querySelector('.rank-summary p:first-child');
   const userRank = users.findIndex(u => u.id === userId) + 1;
-  rankSummary.textContent = `You're ranked #${userRank}`;
+  document.getElementById('userRank').textContent = userRank;
 }
 
 // Initial page load
-if (localStorage.getElementById('userLoggedIn')) {
+if (localStorage.getItem('userLoggedIn')) {
   document.getElementById('connectBtn').style.display = 'none';
   document.getElementById('claimBtn').style.display = 'block';
   document.getElementById('castBalance').textContent = initialBalance;
+  document.getElementById('castBalanceFriends').textContent = initialBalance;
   document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
-  updateLeaderboard();
+  fetchUserData(userId).then(() => {
+    updateLeaderboard();
+  });
 } else {
   showPage('homePage');
 }
