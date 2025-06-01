@@ -576,7 +576,7 @@
         <h1>CAST</h1>
       </div>
       <div class="header-right">
-        <img src="https://iili.io/3mONB4f.png" alt="Farcaster User" id="userAvatar" onclick="toggleDropdown()" />
+        <img src="https://iili.io/3mONB4f.png" alt="Farcaster User" onclick="toggleDropdown()" />
         <div class="dropdown" id="userDropdown">
           <button onclick="logout()">Logout</button>
         </div>
@@ -598,7 +598,7 @@
 
       <div class="community-section">
         <p>Join CAST Community</p>
-        <button onclick="window.open('https://t.me/castcommunity', '_blank')">Join Now</button>
+        <button>Join Now</button>
       </div>
 
       <div class="tasks-section">
@@ -692,25 +692,970 @@
       </div>
 
       <h2>Invited Friends</h2>
-      <div class="friends-list" id="friendsList">
-        <!-- Friends will be dynamically loaded here -->
+      <div class="friends-list">
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user123</p>
+              <p class="earned">+24 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user456</p>
+              <p class="earned">+402 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user789</p>
+              <p class="earned">+488 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user101</p>
+              <p class="earned">+201 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user202</p>
+              <p class="earned">+646 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="friend-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Friend Icon" />
+            <div class="friend-info">
+              <p>user303</p>
+              <p class="earned">+384 CAST</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Leaderboard Page -->
     <div id="leaderboardPage" class="leaderboard-page">
       <h2>Leaderboard</h2>
-      <div class="top-rank" id="topRank">
-        <!-- Top 3 will be dynamically loaded here -->
+      <div class="top-rank">
+        <div class="podium-spot second">
+          <div class="user">
+            <img class="avatar" src="https://iili.io/3mONB4f.png" alt="User Avatar" />
+            <div class="info">🥈 user456<br><span>983,167 CAST</span></div>
+          </div>
+          <div class="platform">2</div>
+        </div>
+        <div class="podium-spot first">
+          <div class="user">
+            <img class="avatar" src="https://iili.io/3mONB4f.png" alt="User Avatar" />
+            <div class="info">🥇 user123<br><span>3,015,421 CAST</span></div>
+          </div>
+          <div class="platform">1</div>
+        </div>
+        <div class="podium-spot third">
+          <div class="user">
+            <img class="avatar" src="https://iili.io/3mONB4f.png" alt="User Avatar" />
+            <div class="info">🥉 user789<br><span>546,264 CAST</span></div>
+          </div>
+          <div class="platform">3</div>
+        </div>
       </div>
 
       <div class="rank-summary">
-        <p>You're ranked #<span id="userRank">0</span></p>
+        <p>You're ranked #588</p>
         <p class="earned">Earned <span id="totalEarned">0</span> CAST</p>
       </div>
 
-      <div class="leaderboard-list" id="leaderboardList">
-        <!-- Leaderboard will be dynamically loaded here -->
+      <div class="leaderboard-list">
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#4 user101</p>
+              <p class="earned">479,308 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#5 user202</p>
+              <p class="earned">436,877 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#6 user303</p>
+              <p class="earned">412,749 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#7 user404</p>
+              <p class="earned">358,743 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#8 user505</p>
+              <p class="earned">315,007 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#9 user606</p>
+              <p class="earned">286,374 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#10 user707</p>
+              <p class="earned">270,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#11 user808</p>
+              <p class="earned">265,987 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#12 user909</p>
+              <p class="earned">260,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#13 user010</p>
+              <p class="earned">255,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#14 user111</p>
+              <p class="earned">250,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#15 user212</p>
+              <p class="earned">245,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#16 user313</p>
+              <p class="earned">240,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#17 user414</p>
+              <p class="earned">235,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#18 user515</p>
+              <p class="earned">230,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#19 user616</p>
+              <p class="earned">225,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#20 user717</p>
+              <p class="earned">220,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#21 user818</p>
+              <p class="earned">216,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#22 user919</p>
+              <p class="earned">211,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#23 user020</p>
+              <p class="earned">207,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#24 user121</p>
+              <p class="earned">202,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#25 user222</p>
+              <p class="earned">198,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#26 user323</p>
+              <p class="earned">193,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#27 user424</p>
+              <p class="earned">189,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#28 user525</p>
+              <p class="earned">184,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#29 user626</p>
+              <p class="earned">179,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#30 user727</p>
+              <p class="earned">175,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#31 user828</p>
+              <p class="earned">170,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#32 user929</p>
+              <p class="earned">166,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#33 user030</p>
+              <p class="earned">161,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#34 user131</p>
+              <p class="earned">157,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#35 user232</p>
+              <p class="earned">152,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#36 user333</p>
+              <p class="earned">148,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#37 user434</p>
+              <p class="earned">143,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#38 user535</p>
+              <p class="earned">138,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#39 user636</p>
+              <p class="earned">134,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#40 user737</p>
+              <p class="earned">129,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#41 user838</p>
+              <p class="earned">125,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#42 user939</p>
+              <p class="earned">120,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#43 user040</p>
+              <p class="earned">116,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#44 user141</p>
+              <p class="earned">111,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#45 user242</p>
+              <p class="earned">107,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#46 user343</p>
+              <p class="earned">102,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#47 user444</p>
+              <p class="earned">97,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#48 user545</p>
+              <p class="earned">93,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#49 user646</p>
+              <p class="earned">88,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#50 user747</p>
+              <p class="earned">84,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#51 user848</p>
+              <p class="earned">79,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#52 user949</p>
+              <p class="earned">75,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#53 user050</p>
+              <p class="earned">70,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#54 user151</p>
+              <p class="earned">66,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#55 user252</p>
+              <p class="earned">61,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#56 user353</p>
+              <p class="earned">56,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#57 user454</p>
+              <p class="earned">52,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#58 user555</p>
+              <p class="earned">47,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#59 user656</p>
+              <p class="earned">43,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#60 user757</p>
+              <p class="earned">38,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#61 user858</p>
+              <p class="earned">34,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#62 user959</p>
+              <p class="earned">29,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#63 user060</p>
+              <p class="earned">25,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#64 user161</p>
+              <p class="earned">20,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#65 user262</p>
+              <p class="earned">15,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#66 user363</p>
+              <p class="earned">11,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#67 user464</p>
+              <p class="earned">6,789 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#68 user565</p>
+              <p class="earned">5,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#69 user666</p>
+              <p class="earned">4,678 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#70 user767</p>
+              <p class="earned">4,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#71 user868</p>
+              <p class="earned">3,567 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#72 user969</p>
+              <p class="earned">3,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#73 user070</p>
+              <p class="earned">2,456 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#74 user171</p>
+              <p class="earned">1,901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#75 user272</p>
+              <p class="earned">1,345 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#76 user373</p>
+              <p class="earned">1,234 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#77 user474</p>
+              <p class="earned">1,123 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#78 user575</p>
+              <p class="earned">1,012 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#79 user676</p>
+              <p class="earned">901 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#80 user777</p>
+              <p class="earned">890 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#81 user878</p>
+              <p class="earned">879 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#82 user979</p>
+              <p class="earned">868 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#83 user080</p>
+              <p class="earned">857 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#84 user181</p>
+              <p class="earned">846 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#85 user282</p>
+              <p class="earned">835 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#86 user383</p>
+              <p class="earned">824 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#87 user484</p>
+              <p class="earned">813 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#88 user585</p>
+              <p class="earned">802 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#89 user686</p>
+              <p class="earned">791 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#90 user787</p>
+              <p class="earned">780 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#91 user888</p>
+              <p class="earned">769 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#92 user989</p>
+              <p class="earned">758 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#93 user090</p>
+              <p class="earned">747 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#94 user191</p>
+              <p class="earned">736 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#95 user292</p>
+              <p class="earned">725 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#96 user393</p>
+              <p class="earned">714 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#97 user494</p>
+              <p class="earned">703 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#98 user595</p>
+              <p class="earned">692 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#99 user696</p>
+              <p class="earned">681 CAST</p>
+            </div>
+          </div>
+        </div>
+        <div class="leaderboard-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="User Icon" />
+            <div class="leaderboard-info">
+              <p>#100 user797</p>
+              <p class="earned">670 CAST</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -731,26 +1676,7 @@
     </nav>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    // Import Firebase SDKs
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-    import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAjvXSHexoOgPzICvx_3OJU6owm3vKXn_s",
-      authDomain: "cast-80422.firebaseapp.com",
-      projectId: "cast-80422",
-      storageBucket: "cast-80422.firebasestorage.app",
-      messagingSenderId: "605002714270",
-      appId: "1:605002714270:web:92013b9b9d9ad116a3ff8f"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+  <script>
     // Particle animation
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
@@ -795,10 +1721,8 @@
 
     // Logout function
     function logout() {
-      localStorage.removeItem('userId');
       alert('Logged out successfully!');
       document.getElementById('userDropdown').style.display = 'none';
-      window.location.reload();
     }
 
     // Page navigation
@@ -811,87 +1735,33 @@
         item.classList.remove('active');
       });
       document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
-      if (pageId === 'friendsPage') loadFriends();
-      if (pageId === 'leaderboardPage') loadLeaderboard();
     }
 
     // Invite functions
-    let userReferralLink = '';
     function shareInvite() {
-      if (navigator.share) {
-        navigator.share({
-          title: 'Join CAST',
-          text: 'Join me on CAST and earn rewards!',
-          url: userReferralLink
-        }).catch(err => console.error('Error sharing:', err));
-      } else {
-        alert(`Share this invite link: ${userReferralLink}`);
-      }
+      alert('Share this invite link: https://castapp.xyz/invite');
     }
 
     function copyInvite() {
-      navigator.clipboard.writeText(userReferralLink).then(() => {
+      navigator.clipboard.writeText('https://castapp.xyz/invite').then(() => {
         alert('Invite link copied to clipboard!');
       });
     }
 
     // Farcaster connection logic
-    let userId = localStorage.getItem('userId') || '';
     let initialBalance = 0;
     let taskRewards = 0;
     let completedTasksCount = 0;
-    let userData = {};
 
-    async function initializeUser(userId) {
-      const userRef = doc(db, 'users', userId);
-      const userSnap = await getDoc(userRef);
+    document.getElementById("connectBtn").addEventListener("click", () => {
       const mockCreatedAt = new Date("2023-10-01");
       const today = new Date();
       const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
+
       const earnedCAST = diffDays * 10;
-
-      if (!userSnap.exists()) {
-        userData = {
-          username: `user${Math.floor(Math.random() * 100000)}`,
-          balance: earnedCAST,
-          tasksCompleted: [],
-          friends: [],
-          avatar: 'https://iili.io/3mONB4f.png',
-          createdAt: today.toISOString()
-        };
-        await setDoc(userRef, userData);
-      } else {
-        userData = userSnap.data();
-      }
-
-      initialBalance = userData.balance || earnedCAST;
-      taskRewards = userData.tasksCompleted.reduce((sum, taskId) => sum + (tasks.find(t => t.id === taskId)?.reward || 0), 0);
-      completedTasksCount = userData.tasksCompleted.length;
-      userReferralLink = `https://castapp.xyz/invite/${userId}`;
-
-      document.getElementById('castBalance').textContent = initialBalance + taskRewards;
-      document.getElementById('completedTasks').textContent = completedTasksCount;
-      document.getElementById('totalRewards').textContent = taskRewards;
-      document.getElementById('totalEarned').textContent = initialBalance + taskRewards;
-      document.getElementById('userAvatar').src = userData.avatar;
-      document.querySelectorAll('.check-btn').forEach(btn => {
-        const taskId = parseInt(btn.getAttribute('data-id'));
-        if (userData.tasksCompleted.includes(taskId)) {
-          btn.textContent = 'Completed';
-          btn.disabled = true;
-          btn.style.backgroundColor = '#444';
-        } else {
-          btn.disabled = false;
-        }
-      });
-    }
-
-    document.getElementById("connectBtn").addEventListener("click", async () => {
-      if (!userId) {
-        userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        localStorage.setItem('userId', userId);
-      }
-      await initializeUser(userId);
+      initialBalance = earnedCAST;
+      document.getElementById("castBalance").textContent = initialBalance;
+      document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
     });
 
     // Define tasks
@@ -905,23 +1775,18 @@
       { id: 7, reward: 100, description: "Share your CAST referral link", completed: false }
     ];
 
-    async function completeTask(taskId) {
+    function completeTask(taskId) {
       const task = tasks.find(t => t.id === taskId);
-      if (task && !userData.tasksCompleted.includes(taskId)) {
-        userData.tasksCompleted.push(taskId);
+      if (task && !task.completed) {
+        task.completed = true;
         taskRewards += task.reward;
         completedTasksCount += 1;
         const totalBalance = initialBalance + taskRewards;
-        userData.balance = totalBalance;
-
-        await setDoc(doc(db, 'users', userId), userData);
-
         document.getElementById('castBalance').textContent = totalBalance;
         document.getElementById('completedTasks').textContent = completedTasksCount;
         document.getElementById('totalRewards').textContent = taskRewards;
         document.getElementById('totalEarned').textContent = totalBalance;
         alert(`Task completed! +${task.reward} CAST added to your balance.`);
-
         const button = document.querySelector(`.check-btn[data-id="${taskId}"]`);
         button.textContent = "Completed";
         button.disabled = true;
@@ -929,94 +1794,8 @@
       }
     }
 
-    async function loadFriends() {
-      const friendsList = document.getElementById('friendsList');
-      friendsList.innerHTML = '';
-
-      const friends = userData.friends || [];
-      for (const friendId of friends) {
-        const friendRef = doc(db, 'users', friendId);
-        const friendSnap = await getDoc(friendRef);
-        if (friendSnap.exists()) {
-          const friendData = friendSnap.data();
-          const friendBalance = friendData.balance || 0;
-          const friendCard = `
-            <div class="friend-card">
-              <div class="task-left">
-                <img src="${friendData.avatar}" alt="Friend Icon" />
-                <div class="friend-info">
-                  <p>${friendData.username}</p>
-                  <p class="earned">+${Math.floor(friendBalance * 0.1)} CAST</p>
-                </div>
-              </div>
-            </div>
-          `;
-          friendsList.innerHTML += friendCard;
-        }
-      }
-    }
-
-    async function loadLeaderboard() {
-      const leaderboardList = document.getElementById('leaderboardList');
-      const topRank = document.getElementById('topRank');
-      leaderboardList.innerHTML = '';
-      topRank.innerHTML = '';
-
-      const usersQuery = query(collection(db, 'users'), orderBy('balance', 'desc'), limit(100));
-      const querySnapshot = await getDocs(usersQuery);
-      const users = [];
-      let userRank = 0;
-      let rank = 0;
-
-      querySnapshot.forEach(doc => {
-        const user = { id: doc.id, ...doc.data() };
-        users.push(user);
-        rank++;
-        if (user.id === userId) {
-          userRank = rank;
-        }
-      });
-
-      // Update user rank
-      document.getElementById('userRank').textContent = userRank;
-
-      // Top 3 users for podium
-      const podium = ['second', 'first', 'third'];
-      for (let i = 0; i < Math.min(3, users.length); i++) {
-        const user = users[i];
-        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
-        topRank.innerHTML += `
-          <div class="podium-spot ${podium[i]}">
-            <div class="user">
-              <img class="avatar" src="${user.avatar}" alt="User Avatar" />
-              <div class="info">${medal} ${user.username}<br><span>${user.balance.toLocaleString()} CAST</span></div>
-            </div>
-            <div class="platform">${i + 1}</div>
-          </div>
-        `;
-      }
-
-      // Rest of the leaderboard
-      users.forEach((user, index) => {
-        leaderboardList.innerHTML += `
-          <div class="leaderboard-card">
-            <div class="task-left">
-              <img src="${user.avatar}" alt="User Icon" />
-              <div class="leaderboard-info">
-                <p>#${index + 1} ${user.username}</p>
-                <p class="earned">${user.balance.toLocaleString()} CAST</p>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-    }
-
     // Initial page load
     showPage('homePage');
-    if (userId) {
-      initializeUser(userId);
-    }
   </script>
 </body>
 </html>
