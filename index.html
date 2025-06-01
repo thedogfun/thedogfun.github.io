@@ -1,0 +1,1022 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CAST - Farcaster Mini App</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(circle at top, #10142a, #0b0f1d);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px 20px 80px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(30, 34, 53, 0.9);
+      padding: 10px 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-left img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .header-left h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      margin: 0;
+    }
+
+    .header-right {
+      position: relative;
+    }
+
+    .header-right img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #e5e7eb;
+      padding: 10px 20px;
+      width: 100%;
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .dropdown button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      width: 120px;
+      height: 120px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.7));
+      position: absolute;
+      z-index: 1;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .balance {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #3b82f6, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 10px 0;
+      animation: fadeIn 1s ease-in;
+    }
+
+    #connectBtn {
+      background: #5865f2;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #connectBtn:hover {
+      background: #4752c4;
+    }
+
+    #connectBtn:active {
+      background: #3b46a3;
+    }
+
+    .community-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .community-section p {
+      margin: 0;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    .community-section button {
+      background: #10b981;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .community-section button:hover {
+      background: #059669;
+    }
+
+    .community-section button:active {
+      background: #047857;
+    }
+
+    .tasks-section {
+      margin-top: 20px;
+    }
+
+    .tasks-section h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .task-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .task-left img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .task-info p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #d1d5db;
+    }
+
+    .task-info p.reward {
+      color: #10b981;
+      font-weight: 500;
+      font-size: 0.8rem;
+    }
+
+    .check-btn {
+      background: #5865f2;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .check-btn:hover {
+      background: #4752c4;
+    }
+
+    .check-btn:active {
+      background: #3b46a3;
+    }
+
+    .check-btn:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+
+    .rewards-summary {
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-align: left;
+    }
+
+    .rewards-summary h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .rewards-summary p {
+      font-size: 1rem;
+      color: #d1d5db;
+      margin: 5px 0;
+    }
+
+    .friends-page, .leaderboard-page {
+      display: none;
+    }
+
+    .friends-page h2, .leaderboard-page h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 20px;
+    }
+
+    .invite-buttons {
+      margin-bottom: 20px;
+    }
+
+    .invite-buttons button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .share-btn {
+      background: #5865f2;
+      color: white;
+    }
+
+    .share-btn:hover {
+      background: #4752c4;
+    }
+
+    .copy-btn {
+      background: #1e40af;
+      color: white;
+    }
+
+    .copy-btn:hover {
+      background: #1e3a8a;
+    }
+
+    .friends-list, .leaderboard-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .friend-card, .leaderboard-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .friend-card img, .leaderboard-card img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .friend-info, .leaderboard-info {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .friend-info p, .leaderboard-info p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #d1d5db;
+    }
+
+    .friend-info p.earned, .leaderboard-info p.earned {
+      color: #10b981;
+      font-weight: 500;
+    }
+
+    .top-rank {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+      perspective: 800px;
+    }
+
+    .podium-spot {
+      width: 30%;
+      min-width: 90px;
+      position: relative;
+    }
+
+    .podium-spot .user {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .user .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid white;
+      margin-bottom: 6px;
+      object-fit: cover;
+    }
+
+    .user .info {
+      font-weight: bold;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .user span {
+      font-size: 0.8rem;
+      color: #ffd700;
+    }
+
+    .platform {
+      height: 70px;
+      background: linear-gradient(to top, #ffce00, #ffdf70);
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .first .platform {
+      height: 120px;
+      background: linear-gradient(to top, #ffd700, #fff8b5);
+    }
+
+    .second .platform {
+      height: 90px;
+      background: linear-gradient(to top, #c0c0c0, #e0e0e0);
+    }
+
+    .third .platform {
+      height: 70px;
+      background: linear-gradient(to top, #cd7f32, #e8c39e);
+    }
+
+    @media (max-width: 480px) {
+      .top-rank {
+        gap: 6px;
+      }
+
+      .user .avatar {
+        width: 50px;
+        height: 50px;
+      }
+
+      .user .info {
+        font-size: 0.8rem;
+      }
+    }
+
+    .rank-summary {
+      display: flex;
+      justify-content: space-between;
+      background: rgba(30, 34, 53, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .rank-summary p {
+      margin: 0;
+      font-size: 1rem;
+      color: #d1d5db;
+    }
+
+    .rank-summary p.earned {
+      color: #10b981;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 400px;
+      background: rgba(14, 17, 31, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #d1d5db;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 5px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-item img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 4px;
+      filter: brightness(0.8);
+    }
+
+    .nav-item.active {
+      color: #00ccff;
+    }
+
+    .nav-item.active img {
+      filter: brightness(1) hue-rotate(180deg);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes particle {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-50px) scale(0); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-left">
+        <img src="https://iili.io/3mONB4f.png" alt="Cast Logo" />
+        <h1>CAST</h1>
+      </div>
+      <div class="header-right">
+        <img src="https://iili.io/3mONB4f.png" alt="Farcaster User" id="userAvatar" onclick="toggleDropdown()" />
+        <div class="dropdown" id="userDropdown">
+          <button onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Home Page -->
+    <div id="homePage" class="home-page">
+      <div class="logo-container">
+        <img src="https://iili.io/3mONB4f.png" alt="Cast Logo" class="logo" />
+        <canvas id="particleCanvas" width="120" height="120"></canvas>
+      </div>
+
+      <div class="balance">
+        <span id="castBalance">0</span> CAST
+      </div>
+
+      <button id="connectBtn">Connect Farcaster</button>
+
+      <div class="community-section">
+        <p>Join CAST Community</p>
+        <button onclick="window.open('https://t.me/castcommunity', '_blank')">Join Now</button>
+      </div>
+
+      <div class="tasks-section">
+        <h2>Your Tasks</h2>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://warpcast.com/cast" target="_blank" class="text-blue-400 hover:text-blue-300">Follow @CAST on Farcaster</a></p>
+              <p class="reward">+100 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="1" onclick="completeTask(1)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://t.me/castcommunity" target="_blank" class="text-blue-400 hover:text-blue-300">Join the CAST Telegram group</a></p>
+              <p class="reward">+200 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="2" onclick="completeTask(2)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://warpcast.com/~/compose" target="_blank" class="text-blue-400 hover:text-blue-300">Post a message with #CAST on Farcaster</a></p>
+              <p class="reward">+300 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="3" onclick="completeTask(3)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://warpcast.com/~/invite" target="_blank" class="text-blue-400 hover:text-blue-300">Invite a friend to join CAST</a></p>
+              <p class="reward">+500 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="4" onclick="completeTask(4)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://warpcast.com/~/settings" target="_blank" class="text-blue-400 hover:text-blue-300">Complete your profile on Farcaster</a></p>
+              <p class="reward">+100 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="5" onclick="completeTask(5)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://t.me/castcommunity" target="_blank" class="text-blue-400 hover:text-blue-300">Participate in the CAST community chat</a></p>
+              <p class="reward">+200 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="6" onclick="completeTask(6)" disabled>Check</button>
+        </div>
+        <div class="task-card">
+          <div class="task-left">
+            <img src="https://iili.io/3mONB4f.png" alt="Task Icon" />
+            <div class="task-info">
+              <p><a href="https://warpcast.com/~/compose" target="_blank" class="text-blue-400 hover:text-blue-300">Share your CAST referral link</a></p>
+              <p class="reward">+100 CAST</p>
+            </div>
+          </div>
+          <button class="check-btn" data-id="7" onclick="completeTask(7)" disabled>Check</button>
+        </div>
+      </div>
+
+      <div class="rewards-summary">
+        <h2>Rewards</h2>
+        <p>Completed Tasks: <span id="completedTasks">0</span> / 7</p>
+        <p>Total Rewards from Tasks: <span id="totalRewards">0</span> CAST</p>
+      </div>
+    </div>
+
+    <!-- Friends Page -->
+    <div id="friendsPage" class="friends-page">
+      <div class="invite-buttons">
+        <p style="margin-bottom: 10px; color: #d1d5db;">Invite Your Friends</p>
+        <p style="margin-bottom: 10px; color: #d1d5db; font-size: 0.9rem;">Share your invitation link and get 10% of friends' points</p>
+        <button class="share-btn" onclick="shareInvite()">Share Invite Link</button>
+        <button class="copy-btn" onclick="copyInvite()">Copy Invite Link</button>
+      </div>
+
+      <h2>Invited Friends</h2>
+      <div class="friends-list" id="friendsList">
+        <!-- Friends will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div id="leaderboardPage" class="leaderboard-page">
+      <h2>Leaderboard</h2>
+      <div class="top-rank" id="topRank">
+        <!-- Top 3 will be dynamically loaded here -->
+      </div>
+
+      <div class="rank-summary">
+        <p>You're ranked #<span id="userRank">0</span></p>
+        <p class="earned">Earned <span id="totalEarned">0</span> CAST</p>
+      </div>
+
+      <div class="leaderboard-list" id="leaderboardList">
+        <!-- Leaderboard will be dynamically loaded here -->
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-item active" onclick="showPage('homePage')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png" alt="Home Icon" />
+        <span>Home</span>
+      </div>
+      <div class="nav-item" onclick="showPage('friendsPage')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1665/1665680.png" alt="Friends Icon" />
+        <span>Friends</span>
+      </div>
+      <div class="nav-item" onclick="showPage('leaderboardPage')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2589/2589175.png" alt="Leaderboard Icon" />
+        <span>Leaderboard</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+    import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAjvXSHexoOgPzICvx_3OJU6owm3vKXn_s",
+      authDomain: "cast-80422.firebaseapp.com",
+      projectId: "cast-80422",
+      storageBucket: "cast-80422.firebasestorage.app",
+      messagingSenderId: "605002714270",
+      appId: "1:605002714270:web:92013b9b9d9ad116a3ff8f"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Particle animation
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+
+    function createParticle() {
+      const particle = {
+        x: Math.random() * canvas.width,
+        y: canvas.height,
+        size: Math.random() * 5 + 2,
+        speed: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.5 + 0.3
+      };
+      particles.push(particle);
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 165, 0, ${p.opacity})`;
+        ctx.fill();
+        p.y -= p.speed;
+        p.opacity -= 0.01;
+        if (p.opacity <= 0 || p.y < 0) {
+          particles.splice(i, 1);
+        }
+      }
+      if (Math.random() < 0.2) createParticle();
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    // Dropdown toggle
+    function toggleDropdown() {
+      const dropdown = document.getElementById('userDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem('userId');
+      alert('Logged out successfully!');
+      document.getElementById('userDropdown').style.display = 'none';
+      window.location.reload();
+    }
+
+    // Page navigation
+    function showPage(pageId) {
+      document.querySelectorAll('.home-page, .friends-page, .leaderboard-page').forEach(page => {
+        page.style.display = 'none';
+      });
+      document.getElementById(pageId).style.display = 'block';
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+      if (pageId === 'friendsPage') loadFriends();
+      if (pageId === 'leaderboardPage') loadLeaderboard();
+    }
+
+    // Invite functions
+    let userReferralLink = '';
+    function shareInvite() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Join CAST',
+          text: 'Join me on CAST and earn rewards!',
+          url: userReferralLink
+        }).catch(err => console.error('Error sharing:', err));
+      } else {
+        alert(`Share this invite link: ${userReferralLink}`);
+      }
+    }
+
+    function copyInvite() {
+      navigator.clipboard.writeText(userReferralLink).then(() => {
+        alert('Invite link copied to clipboard!');
+      });
+    }
+
+    // Farcaster connection logic
+    let userId = localStorage.getItem('userId') || '';
+    let initialBalance = 0;
+    let taskRewards = 0;
+    let completedTasksCount = 0;
+    let userData = {};
+
+    async function initializeUser(userId) {
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
+      const mockCreatedAt = new Date("2023-10-01");
+      const today = new Date();
+      const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
+      const earnedCAST = diffDays * 10;
+
+      if (!userSnap.exists()) {
+        userData = {
+          username: `user${Math.floor(Math.random() * 100000)}`,
+          balance: earnedCAST,
+          tasksCompleted: [],
+          friends: [],
+          avatar: 'https://iili.io/3mONB4f.png',
+          createdAt: today.toISOString()
+        };
+        await setDoc(userRef, userData);
+      } else {
+        userData = userSnap.data();
+      }
+
+      initialBalance = userData.balance || earnedCAST;
+      taskRewards = userData.tasksCompleted.reduce((sum, taskId) => sum + (tasks.find(t => t.id === taskId)?.reward || 0), 0);
+      completedTasksCount = userData.tasksCompleted.length;
+      userReferralLink = `https://castapp.xyz/invite/${userId}`;
+
+      document.getElementById('castBalance').textContent = initialBalance + taskRewards;
+      document.getElementById('completedTasks').textContent = completedTasksCount;
+      document.getElementById('totalRewards').textContent = taskRewards;
+      document.getElementById('totalEarned').textContent = initialBalance + taskRewards;
+      document.getElementById('userAvatar').src = userData.avatar;
+      document.querySelectorAll('.check-btn').forEach(btn => {
+        const taskId = parseInt(btn.getAttribute('data-id'));
+        if (userData.tasksCompleted.includes(taskId)) {
+          btn.textContent = 'Completed';
+          btn.disabled = true;
+          btn.style.backgroundColor = '#444';
+        } else {
+          btn.disabled = false;
+        }
+      });
+    }
+
+    document.getElementById("connectBtn").addEventListener("click", async () => {
+      if (!userId) {
+        userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        localStorage.setItem('userId', userId);
+      }
+      await initializeUser(userId);
+    });
+
+    // Define tasks
+    const tasks = [
+      { id: 1, reward: 100, description: "Follow @CAST on Farcaster", completed: false },
+      { id: 2, reward: 200, description: "Join the CAST Telegram group", completed: false },
+      { id: 3, reward: 300, description: "Post a message with #CAST on Farcaster", completed: false },
+      { id: 4, reward: 500, description: "Invite a friend to join CAST", completed: false },
+      { id: 5, reward: 100, description: "Complete your profile on Farcaster", completed: false },
+      { id: 6, reward: 200, description: "Participate in the CAST community chat", completed: false },
+      { id: 7, reward: 100, description: "Share your CAST referral link", completed: false }
+    ];
+
+    async function completeTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task && !userData.tasksCompleted.includes(taskId)) {
+        userData.tasksCompleted.push(taskId);
+        taskRewards += task.reward;
+        completedTasksCount += 1;
+        const totalBalance = initialBalance + taskRewards;
+        userData.balance = totalBalance;
+
+        await setDoc(doc(db, 'users', userId), userData);
+
+        document.getElementById('castBalance').textContent = totalBalance;
+        document.getElementById('completedTasks').textContent = completedTasksCount;
+        document.getElementById('totalRewards').textContent = taskRewards;
+        document.getElementById('totalEarned').textContent = totalBalance;
+        alert(`Task completed! +${task.reward} CAST added to your balance.`);
+
+        const button = document.querySelector(`.check-btn[data-id="${taskId}"]`);
+        button.textContent = "Completed";
+        button.disabled = true;
+        button.style.backgroundColor = "#444";
+      }
+    }
+
+    async function loadFriends() {
+      const friendsList = document.getElementById('friendsList');
+      friendsList.innerHTML = '';
+
+      const friends = userData.friends || [];
+      for (const friendId of friends) {
+        const friendRef = doc(db, 'users', friendId);
+        const friendSnap = await getDoc(friendRef);
+        if (friendSnap.exists()) {
+          const friendData = friendSnap.data();
+          const friendBalance = friendData.balance || 0;
+          const friendCard = `
+            <div class="friend-card">
+              <div class="task-left">
+                <img src="${friendData.avatar}" alt="Friend Icon" />
+                <div class="friend-info">
+                  <p>${friendData.username}</p>
+                  <p class="earned">+${Math.floor(friendBalance * 0.1)} CAST</p>
+                </div>
+              </div>
+            </div>
+          `;
+          friendsList.innerHTML += friendCard;
+        }
+      }
+    }
+
+    async function loadLeaderboard() {
+      const leaderboardList = document.getElementById('leaderboardList');
+      const topRank = document.getElementById('topRank');
+      leaderboardList.innerHTML = '';
+      topRank.innerHTML = '';
+
+      const usersQuery = query(collection(db, 'users'), orderBy('balance', 'desc'), limit(100));
+      const querySnapshot = await getDocs(usersQuery);
+      const users = [];
+      let userRank = 0;
+      let rank = 0;
+
+      querySnapshot.forEach(doc => {
+        const user = { id: doc.id, ...doc.data() };
+        users.push(user);
+        rank++;
+        if (user.id === userId) {
+          userRank = rank;
+        }
+      });
+
+      // Update user rank
+      document.getElementById('userRank').textContent = userRank;
+
+      // Top 3 users for podium
+      const podium = ['second', 'first', 'third'];
+      for (let i = 0; i < Math.min(3, users.length); i++) {
+        const user = users[i];
+        const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
+        topRank.innerHTML += `
+          <div class="podium-spot ${podium[i]}">
+            <div class="user">
+              <img class="avatar" src="${user.avatar}" alt="User Avatar" />
+              <div class="info">${medal} ${user.username}<br><span>${user.balance.toLocaleString()} CAST</span></div>
+            </div>
+            <div class="platform">${i + 1}</div>
+          </div>
+        `;
+      }
+
+      // Rest of the leaderboard
+      users.forEach((user, index) => {
+        leaderboardList.innerHTML += `
+          <div class="leaderboard-card">
+            <div class="task-left">
+              <img src="${user.avatar}" alt="User Icon" />
+              <div class="leaderboard-info">
+                <p>#${index + 1} ${user.username}</p>
+                <p class="earned">${user.balance.toLocaleString()} CAST</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Initial page load
+    showPage('homePage');
+    if (userId) {
+      initializeUser(userId);
+    }
+  </script>
+</body>
+</html>
