@@ -101,7 +101,7 @@ let lastClaimTime = localStorage.getItem('lastClaimTime') ? new Date(localStorag
 
 document.getElementById('connectBtn').addEventListener('click', () => {
   const mockCreatedAt = new Date('2023-10-01');
-  const today = new Date('2025-06-01T17:57:00+06:00');
+  const today = new Date('2025-06-01T18:08:00+06:00');
   const diffDays = Math.floor((today - mockCreatedAt) / (1000 * 60 * 60 * 24));
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const availableTokens = hoursSinceLastClaim;
@@ -126,7 +126,7 @@ function closePopup() {
 }
 
 document.getElementById('claimBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T17:57:00+06:00');
+  const today = new Date('2025-06-01T18:08:00+06:00');
   const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
   const tokensToClaim = hoursSinceLastClaim;
 
