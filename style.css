@@ -122,27 +122,6 @@ canvas {
   animation: fadeIn 1s ease-in;
 }
 
-#claimBtn {
-  background: #10b981;
-  color: white;
-  padding: 12px 20px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-#claimBtn:hover {
-  background: #059669;
-}
-
-#claimBtn:active {
-  background: #047857;
-}
-
 .community-section {
   display: flex;
   justify-content: space-between;
@@ -535,53 +514,6 @@ canvas {
   100% { transform: translateY(-50px) scale(0); opacity: 0; }
 }
 
-#popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-
-.popup-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  color: white;
-}
-
-.popup-content h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.popup-content p {
-  font-size: 1rem;
-  margin: 5px 0;
-}
-
-.popup-content button {
-  background: #10b981;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.popup-content button:hover {
-  background: #059669;
-}
-
 #registrationPopup {
   display: none;
   position: fixed;
@@ -589,32 +521,42 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: #10142a;
   z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #registrationPopup .popup-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: #1e293b;
-  padding: 20px;
+  padding: 30px;
   border-radius: 10px;
   text-align: center;
   color: white;
-  width: 80%;
-  max-width: 300px;
+  width: 90%;
+  max-width: 400px;
+}
+
+#registrationPopup h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+#registrationPopup p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
 }
 
 #registrationPopup button {
   background: #10b981;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
-  margin-top: 10px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 #registrationPopup button:hover {

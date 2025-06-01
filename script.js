@@ -48,14 +48,13 @@ function toggleDropdown() {
 // Logout function
 function logout() {
   localStorage.removeItem('userLoggedIn');
-  localStorage.removeItem('lastClaimTime');
   localStorage.removeItem('totalTokens');
   localStorage.removeItem('userId');
   localStorage.removeItem('accountCreatedAt');
   document.getElementById('castBalance').textContent = '0';
   document.getElementById('totalEarned').textContent = '0';
   document.getElementById('userLogo').src = 'https://iili.io/FHHL8BV.png';
-  document.getElementById('registrationPopup').style.display = 'block';
+  document.getElementById('registrationPopup').style.display = 'flex';
   document.getElementById('homePage').style.display = 'none';
   document.getElementById('friendsPage').style.display = 'none';
   document.getElementById('leaderboardPage').style.display = 'none';
@@ -107,27 +106,41 @@ function shareReferLink() {
   completeTask(7);
 }
 
-// Fetch user data from Supabase
+// Fetch user data from Supabase and simulate Farcaster API
 let farcasterUsername = 'User';
 let farcasterAvatar = 'https://iili.io/FHHL8BV.png';
+let accountCreatedAt = new Date('2023-10-01');
 
 async function fetchUserData(userId) {
   try {
+    // Simulate Farcaster API call (mock data for now)
+    const farcasterData = {
+      username: `farcasterUser${Math.floor(Math.random() * 1000)}`,
+      avatar: 'https://iili.io/FHHL8BV.png', // Mock avatar URL
+      created_at: '2023-10-01T00:00:00Z' // Mock account creation date
+    };
+
+    // Store in Supabase
     const { data, error } = await supabase
       .from('profiles')
-      .select('username, avatar, created_at')
-      .eq('id', userId)
+      .upsert({
+        id: userId,
+        username: farcasterData.username,
+        avatar: farcasterData.avatar,
+        created_at: farcasterData.created_at
+      })
+      .select()
       .single();
 
     if (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error storing user data:', error);
       return;
     }
 
     if (data) {
       farcasterUsername = data.username || 'User';
       farcasterAvatar = data.avatar || 'https://iili.io/FHHL8BV.png';
-      const accountCreatedAt = new Date(data.created_at);
+      accountCreatedAt = new Date(data.created_at);
       localStorage.setItem('accountCreatedAt', accountCreatedAt.toISOString());
 
       // Update UI with user data
@@ -141,25 +154,24 @@ async function fetchUserData(userId) {
   }
 }
 
-// Registration and Claim Logic
+// Registration Logic
 let initialBalance = parseInt(localStorage.getItem('totalTokens') || 0);
 let taskRewards = 0;
 let completedTasksCount = 0;
-let userId = localStorage.getItem('userId') || 'user' + Math.floor(Math.random() * 1000);
-let accountCreatedAt = localStorage.getItem('accountCreatedAt') ? new Date(localStorage.getItem('accountCreatedAt')) : new Date('2023-10-01');
-let lastClaimTime = localStorage.getItem('lastClaimTime') ? new Date(localStorage.getItem('lastClaimTime')) : new Date('2023-10-01');
+let userId = localStorage.getItem('userId') || null;
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('userLoggedIn')) {
-    document.getElementById('registrationPopup').style.display = 'block';
+    document.getElementById('registrationPopup').style.display = 'flex';
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('friendsPage').style.display = 'none';
     document.getElementById('leaderboardPage').style.display = 'none';
   } else {
+    userId = localStorage.getItem('userId');
+    accountCreatedAt = new Date(localStorage.getItem('accountCreatedAt'));
     document.getElementById('registrationPopup').style.display = 'none';
     fetchUserData(userId).then(() => {
       showPage('homePage');
-      document.getElementById('claimBtn').style.display = 'block';
       document.getElementById('castBalance').textContent = initialBalance;
       document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
       updateLeaderboard();
@@ -168,15 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('registerBtn').addEventListener('click', async () => {
-  // Simulate Farcaster registration (replace with actual Farcaster SDK integration)
-  userId = 'user' + Math.floor(Math.random() * 1000); // Mock user ID
+  // Simulate Farcaster authentication (replace with actual Farcaster SDK integration)
+  userId = `farcaster_${Math.floor(Math.random() * 1000000)}`; // Mock Farcaster user ID
   await fetchUserData(userId);
 
   localStorage.setItem('userLoggedIn', 'true');
   localStorage.setItem('userId', userId);
-  localStorage.setItem('accountCreatedAt', accountCreatedAt.toISOString());
 
-  const today = new Date('2025-06-01T22:26:00+06:00');
+  const today = new Date('2025-06-02T05:27:00+06:00');
   const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
   const availableTokens = diffDays * 25;
 
@@ -188,45 +199,21 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
 });
 
 document.getElementById('claimPopupBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T22:26:00+06:00');
+  const today = new Date('2025-06-02T05:27:00+06:00');
   const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
   const tokensToClaim = diffDays * 25;
 
   if (tokensToClaim > 0) {
     initialBalance += tokensToClaim;
-    lastClaimTime = today;
     localStorage.setItem('totalTokens', initialBalance);
-    localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
 
     document.getElementById('castBalance').textContent = initialBalance;
     document.getElementById('totalEarned').textContent = initialBalance;
     document.getElementById('registrationPopup').style.display = 'none';
     document.getElementById('homePage').style.display = 'block';
-    document.getElementById('claimBtn').style.display = 'block';
     document.querySelectorAll('.check-btn').forEach(btn => btn.disabled = false);
     updateLeaderboard();
     alert(`Claimed ${tokensToClaim} tokens!`);
-  }
-});
-
-document.getElementById('claimBtn').addEventListener('click', () => {
-  const today = new Date('2025-06-01T22:26:00+06:00');
-  const diffDays = Math.floor((today - accountCreatedAt) / (1000 * 60 * 60 * 24));
-  const hoursSinceLastClaim = Math.floor((today - lastClaimTime) / (1000 * 60 * 60));
-  const daysSinceLastClaim = Math.floor(hoursSinceLastClaim / 24);
-  const tokensToClaim = daysSinceLastClaim * 25;
-
-  if (tokensToClaim > 0) {
-    initialBalance += tokensToClaim;
-    lastClaimTime = today;
-    localStorage.setItem('totalTokens', initialBalance);
-    localStorage.setItem('lastClaimTime', lastClaimTime.toISOString());
-    document.getElementById('castBalance').textContent = initialBalance;
-    document.getElementById('totalEarned').textContent = initialBalance;
-    updateLeaderboard();
-    alert(`Claimed ${tokensToClaim} tokens!`);
-  } else {
-    alert('No tokens to claim yet.');
   }
 });
 
